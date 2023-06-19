@@ -1,0 +1,123 @@
+.plan-main {
+  height: 100vh;
+  width: 100%;
+  /* position: absolute; */
+  /* top: 0;
+  left: 0; */
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(49 48 48);
+}
+
+.plan-maps-main {
+  width: 100%;
+  height: 100%;
+}
+
+.plan-gmap {
+  width: calc(100% - var(--plan-right-wdith));
+  height: calc(100% - var(--plan-bottom-height));
+  position: absolute;
+}
+
+.plan-parent {
+  display: flex;
+  height: calc(100% - var(--plan-bottom-height));
+  /* overflow: hidden; */
+}
+
+.right-column {
+  width: var(--plan-right-wdith);
+}
+
+.bottom-area {
+  height: var(--plan-bottom-height);
+  overflow: auto;
+}
+
+:root {
+  --plan-bottom-height: 150px;
+  --plan-right-wdith: 150px;
+}
+
+/* Table styling */
+#maintable {
+  margin: auto;
+  border-collapse: collapse;
+  overflow: auto;
+}
+
+#maintable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+#maintable td {
+  border: 1px solid #ddd;
+  padding: 0;
+}
+
+#maintable tr:nth-child(even),
+#maintable tr:nth-child(even) > td > input,
+#maintable tr:nth-child(even) > td > select {
+  background-color: #f2f2f2b7;
+}
+
+#maintable > tr > td > input:hover,
+#maintable > tr > td > select:hover {
+  background-color: #ddd;
+  cursor: cell;
+}
+
+#maintable tr > td > input:focus,
+#maintable tr > td > select:focus {
+  background-color: #ddd;
+  cursor: auto;
+}
+
+#maintable td:hover {
+  background-color: #ddd;
+  cursor: cell;
+}
+
+/* #maintable td:hover, #maintable > tr > td:hover > input:focus {background-color: #ddd;} */
+
+#maintable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #39813f;
+  color: white;
+}
+
+td > input,
+td > select {
+  border: 0;
+  margin: 0;
+  font-size: medium;
+  text-align: center;
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+td > input:focus-visible,
+td > select:focus-visible {
+  outline: solid green 1px;
+}
+
+td > span > button {
+  border: 0;
+  padding: 2px 5px;
+  border-radius: 5px;
+  margin: 0;
+  color: green;
+  transition-duration: 0.4s;
+}
+
+.wmbox {
+  padding: 5px;
+  white-space: nowrap;
+  width: 100%;
+}
