@@ -1,0 +1,19 @@
+.quick-grid-item,
+.quick-grid-item > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.quick-grid-item {
+  color: #B6EADA;
+}
+
+.quick-grid-item .value {
+  font-size: 50px;
+}
+
+.quick-grid-item .value:nth-of-type(1) {
+  color: #ff55ff;
+}

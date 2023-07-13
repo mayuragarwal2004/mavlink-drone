@@ -17,6 +17,8 @@
 .plan-gmap {
   width: calc(100% - var(--plan-right-wdith));
   height: calc(100% - var(--plan-bottom-height));
+  /* width: 100%;
+  height: 100%; */
   position: absolute;
 }
 
@@ -89,6 +91,13 @@
   text-align: left;
   background-color: #39813f;
   color: white;
+}
+
+
+#maintable input::-webkit-outer-spin-button,
+#maintable input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 td > input,

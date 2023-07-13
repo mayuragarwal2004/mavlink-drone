@@ -13,18 +13,18 @@
 } */
 
 .maps-main-body {
-  height: 100vh;
+  height: var(--body-height);
   width: 100%;
   position: relative;
 }
 
 .gmap {
-  height: 100vh;
+  height: var(--body-height);
   width: 100%;
 }
 
 .loading {
-  height: 100vh;
+  height: var(--body-height);
   width: 100%;
   position: absolute;
   top: 0;
@@ -35,13 +35,12 @@
 }
 
 .maps-body-gmap {
-  height: 100vh;
+  height: var(--body-height);
   width: 100%;
   position: absolute;
   top: 0;
   left: 0;
 }
-
 
 .maps-body {
   width: 100%;
@@ -59,14 +58,14 @@
   align-items: center;
 }
 
-.divider{
+.divider {
   border-left: 2px solid rgb(133, 133, 133);
   height: 70%;
   position: absolute;
   margin-left: -3px;
 }
 
-.header-right-info-block{
+.header-right-info-block {
   background-color: #343438;
   padding: 3px 15px;
   border-radius: 15px;
@@ -74,16 +73,28 @@
   color: white;
 }
 
-.battery-level{
+.battery-level {
   margin: 0 5px;
 }
 
-.left-header, .center-header, .right-header, .battery-level{
+.left-header,
+.center-header,
+.right-header,
+.battery-level {
   display: flex;
   align-items: center;
 }
 
-.zoom-slider {
+.main-map-overlay {
+  position: initial;
+  height: calc(var(--body-height) - 48px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+
+.left-panel-main-parent {
   position: initial;
   height: 90%;
   display: flex;
@@ -110,7 +121,7 @@
   right: 0;
   background-color: #424242;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 5px;
 }
@@ -123,7 +134,9 @@
   cursor: not-allowed;
 }
 
-.dropdown-content .dropdown-content-block:hover {background-color: #535353;}
+.dropdown-content .dropdown-content-block:hover {
+  background-color: #535353;
+}
 
 .dropdown:hover .dropdown-content {
   display: block;
@@ -133,11 +146,11 @@
   background-color: #363636;
 }
 
-.dropbtn{
+.dropbtn {
   border-radius: 5px;
 }
 
-.speed-and-rpy{
+.speed-and-rpy {
   display: flex;
   background-color: #343438dc;
   position: relative;
@@ -156,7 +169,7 @@
   display: flex;
 }
 
-.speed-and-rpy div{
+.speed-and-rpy div {
   margin: 0 5px;
 }
 
@@ -170,10 +183,127 @@
   border: 5px solid black;
 }
 
-.rpy div{
+.rpy div {
   margin: 0;
 }
 
-.rpy:hover{
+.rpy:hover {
   transform: perspective(0);
+}
+
+.right-panel-main-parent {
+  position: relative;
+  transition: all 0.7s ease;
+  align-items: center;
+  height: 90%;
+  width: var(--right-panel-width);
+}
+
+.arrow-main-parent {
+  margin-right: 10px;
+  padding: 20px 10px;
+  border-radius: 5px;
+  background-color: #03001C;
+  left: -56px;
+  position: absolute;
+  top: 50px;
+}
+
+#arrow-main {
+  color: #B6EADA;
+  transition: all 1s ease;
+}
+
+.right-panel-main-parent.inactive .arrow-main {
+  transform: rotate(0deg);
+}
+
+.right-panel-main-parent.active .arrow-main {
+  transform: rotate(180deg);
+}
+
+.right-panel-body {
+  background-color: #03001C;
+  padding: 10px;
+  height: 95%;
+  border-radius: 10px;
+}
+
+.right-panel-main-parent.active {
+  right: 0px;
+}
+
+.right-panel-main-parent.inactive {
+  right: calc(0px - var(--right-panel-width));
+}
+
+.left-menu{
+  background-color: #03001C;
+  z-index: 1;
+  border-radius: 10px;
+  color: #B6EADA;
+}
+
+.left-menu button{
+  color: #B6EADA;
+}
+
+.tab-panel-hide{
+  display: none;
+}
+
+:root {
+  --body-height: calc(100vh - 72px);
+  --right-panel-width: 30%;
+}
+
+
+
+
+.connect{
+  display: flex;
+}
+
+.connection-panel{
+  background-color: #301e67a4;
+  margin: 10px;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.connection-panel-grid-item,
+.connection-panel-grid-item > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rocket-launch-svg{
+  height: 30px;
+  width: fit-content;
+  margin: 5px
+}
+
+.rotate-right{
+  transform: rotate(90deg);
+}
+
+.rotate-left{
+  transform: rotate(270deg);
+}
+
+.rotate-top{
+  transform: rotate(0deg);
+}
+
+.rotate-bottom{
+  transform: rotate(180deg);
+}
+
+.rocket-launch-svg path{
+  fill: white;
+}
+
+.tab-panel{
+  overflow: auto;
 }

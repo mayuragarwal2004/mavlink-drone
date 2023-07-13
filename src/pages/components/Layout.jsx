@@ -10,6 +10,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import "./Layout.css";
+import { useData } from "./context/auth/DataState";
+import { portUpdate, requestConnect } from "../functionUtils";
+
+import pcbpowerlogo from "../../PCB_Power.png"
 
 const headersData = [
   {
@@ -50,9 +54,10 @@ const baudData = [
 
 const Layout = () => {
   const [age, setAge] = React.useState("");
+  const { data, client } = useData();
 
   const [connectType, setconnectType] = useState("");
-  const [baud, setbaud] = useState();
+  const [baud, setbaud] = useState("");
   const handleconnectTypeChange = (event) => {
     setconnectType(event.target.value);
   };
@@ -61,26 +66,39 @@ const Layout = () => {
     setbaud(event.target.value);
   };
 
+  // const requestConnect = () => {
+  //   client.send(
+  //     JSON.stringify({
+  //       type: "message",
+  //       purpose: "ConnectVehicle",
+  //       port: connectType,
+  //       baud
+  //     })
+  //   );
+  // };
+
   const displayDesktop = () => {
     return (
       <Toolbar className="toolbar">
         <div>{getMenuButtons()}</div>
         <div className="toolbar-child-right">
+          <img src={pcbpowerlogo} alt="pcb power" style={{height:"50px", margin: "0 10px"}} />
           {Logo}
-          <FormControl variant="filled" sx={{ m: 1, minWidth: 90 }}>
+          <FormControl size="small" variant="filled" sx={{ m: 1, minWidth: 90 }}>
             <InputLabel
-              id="demo-simple-select-filled-label"
+              id="demo-simple-select-small-filled-label"
               sx={{
                 color: "white",
                 borderColor: "white",
-                fontSize: 15
+                fontSize: 10,
               }}
+              onClick={() => console.log("clicked 1")}
             >
               Connect Type
             </InputLabel>
             <Select
-              labelId="demo-simple-select-filled-label"
-              id="demo-simple-select-filled"
+              labelId="demo-simple-select-small-filled-label"
+              id="demo-simple-select-small-filled"
               value={connectType}
               onChange={handleconnectTypeChange}
               sx={{
@@ -104,12 +122,15 @@ const Layout = () => {
                   // border: "1px solid white",
                 },
               }}
+              onOpen={() => {
+                portUpdate(client);
+              }}
             >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              {connectToData.map((item) => (
-                <MenuItem value={item.value}>{item.displayName}</MenuItem>
+              {data?.ports?.map((item, index) => (
+                <MenuItem key={index} value={item?.port}>{item.port}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -126,7 +147,7 @@ const Layout = () => {
             <Select
               labelId="demo-simple-select-filled-label"
               id="demo-simple-select-filled"
-              value={age}
+              value={baud}
               onChange={handleBaudChange}
               sx={{
                 color: "white",
@@ -153,12 +174,12 @@ const Layout = () => {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              {baudData.map((item) => (
-                <MenuItem value={item.value}>{item.displayName}</MenuItem>
+              {baudData.map((item, index) => (
+                <MenuItem key={index} value={item.value}>{item.displayName}</MenuItem>
               ))}
             </Select>
           </FormControl>
-          <Button>Connect</Button>
+          <Button onClick={()=>requestConnect(client, {connectType, baud})}>Connect</Button>
         </div>
       </Toolbar>
     );

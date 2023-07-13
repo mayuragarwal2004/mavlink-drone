@@ -1,7 +1,7 @@
 const WebSocket = require('ws');
 
 // Create a WebSocket server
-const wss = new WebSocket.Server({ port: 4000 });
+const wss = new WebSocket.Server({ port: 8080 });
 
 // Handle incoming WebSocket connections
 wss.on('connection', (ws) => {
