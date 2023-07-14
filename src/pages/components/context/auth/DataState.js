@@ -10,62 +10,13 @@ const client = new W3CWebSocket("ws://127.0.0.1:8000");
 const DataState = (props) => {
   const [serverInfo, setserverInfo] = useState({
     ports: [],
+    x: "abc",
   });
-  const [data, setdata] = useState({
-    1: {
-      message_type: "vehicle_data",
-      systemid: 1,
-      connection: "COM4",
-      GPS_RAW_INT: {
-        lat: null,
-        lng: null,
-        alt: null,
-        eph: null,
-        epv: null,
-        satellites_visible: null,
-        fix_type: null,
-      },
-      GLOBAL_POSITION_INT: {
-        lat: null,
-        lng: null,
-        alt: null,
-        vx: null,
-        vy: null,
-        vz: null,
-      },
-      ATTITUDE: {
-        roll: 0,
-        pitch: 0,
-        yaw: 0,
-        rollspeed: 0,
-        pitchspeed: 0,
-        yawspeed: 0,
-      },
-      Battery: { current: 0, level: 0, voltage: 0 },
-      SYS_STATUS: { current: null, level: null, voltage: null },
-      EKF_STATUS_REPORT: {
-        ekf_poshorizabs: false,
-        ekf_constposmode: false,
-        ekf_predposhorizabs: false,
-      },
-      HEARTBEAT: {
-        flightmode: "AUTO",
-        armed: false,
-        system_status: null,
-        autopilot_type: null,
-        vehicle_type: null,
-      },
-      VFR_HUD: { heading: null, groundspeed: null, airspeed: null },
-      RANGEFINDER: { rngfnd_voltage: null, rngfnd_distance: null },
-      MOUNT_STATUS: { mount_pitch: null, mount_roll: null, mount_yaw: null },
-      AUTOPILOT_VERSION: {
-        capabilities: null,
-        raw_version: null,
-        autopilot_version_msg_count: 0,
-      },
-    },
-  });
+  const [selectedVehicle, setselectedVehicle] = useState();
+  const [data, setdata] = useState({});
   // const [currentUserRole, setcurrentUserRole] = useState();
+
+  console.log({ serverInfo });
 
   useEffect(() => {
     client.onopen = () => {
@@ -78,6 +29,11 @@ const DataState = (props) => {
           ...prev,
           [dataFromServer.systemid]: { ...dataFromServer },
         }));
+      else if (dataFromServer.message_type === "SystemInfo")
+        setserverInfo((prev) => ({
+          ...prev,
+          ports: dataFromServer.ports,
+        }));
     };
 
     return () => {
@@ -87,7 +43,13 @@ const DataState = (props) => {
 
   console.log(data);
 
-  const value = { data, client };
+  const value = {
+    data,
+    serverInfo,
+    client,
+    selectedVehicle,
+    setselectedVehicle,
+  };
 
   return (
     <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>

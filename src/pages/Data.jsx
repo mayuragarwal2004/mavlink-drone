@@ -42,7 +42,8 @@ function a11yProps(index) {
 }
 
 const Data = () => {
-  const { data, client } = useData();
+  const { data, client, serverInfo, selectedVehicle, setselectedVehicle } =
+    useData();
   const [rpy, setrpy] = useState({ roll: 0, pitch: 0, yaw: 0 });
   const [droneData, setDroneData] = useState();
   const [showInfoWindow, setInfoWindowFlag] = useState(true);
@@ -57,6 +58,35 @@ const Data = () => {
   const [activeMarker, setActiveMarker] = useState(null);
   const [armStatus, setArmStatus] = useState({ isArm: false });
   const [rightPanel, setrightPanel] = useState(true);
+  const [ports, setports] = useState([]);
+  const [connectSelectOpen, setconnectSelectOpen] = useState(false);
+  console.log(connectSelectOpen);
+  // useEffect(() => {
+  //   if (serverInfo.ports !== ports) {
+  //     setports(serverInfo.ports);
+  //     console.log("I ran");
+  //   }
+  // }, [serverInfo.ports]);
+
+  // React.useEffect(() => {
+  //   let active = true;
+
+  //   if (!loading) {
+  //     return undefined;
+  //   }
+
+  //   (async () => {
+  //     // await sleep(1e3); // For demo purposes.
+
+  //     if (active) {
+  //       setports([...serverInfo.ports]);
+  //     }
+  //   })();
+
+  //   return () => {
+  //     active = false;
+  //   };
+  // }, [loading]);
 
   const handlerightpanelview = () => {
     setrightPanel((prev) => !prev);
@@ -286,7 +316,21 @@ const Data = () => {
               <TabPanel value={value} index={0}>
                 {Object.keys(data).map((item, i) => (
                   <div className="connection-panel" key={i}>
-                    <div className="head">{data[item].connection}</div>
+                    <div className="head">
+                      <div className="connection-string">
+                        {data[item].connection}
+                      </div>
+                      <button
+                        className="header-right-info-block"
+                        onClick={() =>
+                          data[item]?.HEARTBEAT?.armed
+                            ? disarm(client, data[item].systemid)
+                            : arm(client, data[item].systemid)
+                        }
+                      >
+                        {data[item]?.HEARTBEAT?.armed ? "Armed" : "Disarmed"}
+                      </button>
+                    </div>
                     <hr />
                     <div className="body">
                       <Grid container spacing={2}>
@@ -307,8 +351,8 @@ const Data = () => {
                               size={20}
                               value={data[item].Battery.level}
                             />
-                            {data[item].Battery.level && (
-                              <>{data[item].Battery.level}%</>
+                            {data[item].SYS_STATUS.level && (
+                              <>{data[item].SYS_STATUS.level}%</>
                             )}
                           </div>
                         </Grid>
@@ -319,7 +363,8 @@ const Data = () => {
                         >
                           <div>
                             <RocketLaunch className="rocket-launch-svg rotate-right" />
-                            {data[item]?.VFR_HUD?.groundspeed || 0.0}
+                            {data[item]?.VFR_HUD?.groundspeed?.toFixed(2) ||
+                              0.0}
                           </div>
                         </Grid>
                         <Grid
@@ -335,7 +380,7 @@ const Data = () => {
                                   : "rotate-top"
                               )}
                             />
-                            {data[item]?.VFR_HUD?.climb || 0.0}
+                            {data[item]?.VFR_HUD?.climb?.toFixed(2) || 0.0}
                           </div>
                         </Grid>
                       </Grid>
@@ -365,6 +410,7 @@ const Data = () => {
                       id="demo-simple-select-small-filled"
                       value={connectType}
                       onChange={handleconnectTypeChange}
+                      open={connectSelectOpen}
                       sx={{
                         color: "white",
                         borderColor: "white",
@@ -388,12 +434,16 @@ const Data = () => {
                       }}
                       onOpen={() => {
                         portUpdate(client);
+                        setconnectSelectOpen(true)
+                      }}
+                      onClose={() => {
+                        setconnectSelectOpen(false)
                       }}
                     >
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      {data?.ports?.map((item, index) => (
+                      {serverInfo?.ports?.map((item, index) => (
                         <MenuItem key={index} value={item?.port}>
                           {item.port}
                         </MenuItem>

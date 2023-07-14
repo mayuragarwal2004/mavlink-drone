@@ -203,14 +203,14 @@
   margin-right: 10px;
   padding: 20px 10px;
   border-radius: 5px;
-  background-color: #03001C;
+  background-color: #03001c;
   left: -56px;
   position: absolute;
   top: 50px;
 }
 
 #arrow-main {
-  color: #B6EADA;
+  color: #b6eada;
   transition: all 1s ease;
 }
 
@@ -223,7 +223,7 @@
 }
 
 .right-panel-body {
-  background-color: #03001C;
+  background-color: #03001c;
   padding: 10px;
   height: 95%;
   border-radius: 10px;
@@ -237,18 +237,18 @@
   right: calc(0px - var(--right-panel-width));
 }
 
-.left-menu{
-  background-color: #03001C;
+.left-menu {
+  background-color: #03001c;
   z-index: 1;
   border-radius: 10px;
-  color: #B6EADA;
+  color: #b6eada;
 }
 
-.left-menu button{
-  color: #B6EADA;
+.left-menu button {
+  color: #b6eada;
 }
 
-.tab-panel-hide{
+.tab-panel-hide {
   display: none;
 }
 
@@ -257,14 +257,11 @@
   --right-panel-width: 30%;
 }
 
-
-
-
-.connect{
+.connect {
   display: flex;
 }
 
-.connection-panel{
+.connection-panel {
   background-color: #301e67a4;
   margin: 10px;
   padding: 5px 10px;
@@ -278,32 +275,37 @@
   justify-content: center;
 }
 
-.rocket-launch-svg{
+.rocket-launch-svg {
   height: 30px;
   width: fit-content;
-  margin: 5px
+  margin: 5px;
 }
 
-.rotate-right{
+.rotate-right {
   transform: rotate(90deg);
 }
 
-.rotate-left{
+.rotate-left {
   transform: rotate(270deg);
 }
 
-.rotate-top{
+.rotate-top {
   transform: rotate(0deg);
 }
 
-.rotate-bottom{
+.rotate-bottom {
   transform: rotate(180deg);
 }
 
-.rocket-launch-svg path{
+.rocket-launch-svg path {
   fill: white;
 }
 
-.tab-panel{
+.tab-panel {
   overflow: auto;
+}
+
+.connection-panel .head {
+  display: flex;
+  justify-content: space-between;
 }
