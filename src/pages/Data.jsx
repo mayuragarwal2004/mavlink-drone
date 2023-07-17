@@ -290,9 +290,9 @@ const Data = () => {
                       readingText: { fontSize: 0 },
                     }}
                     size={20}
-                    value={data[selectedVehicle].Battery.level}
+                    value={data[selectedVehicle].SYS_STATUS.level}
                   />
-                  {data[selectedVehicle].Battery.level}%
+                  {data[selectedVehicle].SYS_STATUS.level}%
                 </div>
               </div>
             )}
@@ -361,7 +361,7 @@ const Data = () => {
                                 readingText: { fontSize: 0 },
                               }}
                               size={20}
-                              value={data[item].Battery.level}
+                              value={data[item].SYS_STATUS.level}
                             />
                             {data[item].SYS_STATUS.level && (
                               <>{data[item].SYS_STATUS.level}%</>
@@ -548,19 +548,13 @@ const Data = () => {
             />
             {selectedVehicle && data[selectedVehicle] && (
               <div className="speed-and-rpy">
-                <div className="altitude speed-and-rpy-child">
-                  <div>Altitude</div>
-                  <div>{altitude}</div>
-                </div>
-                <div className="rpy-parent">
                   <div className="rpy">
                     <Canvas>
                       <ambientLight intensity={0.5} />
                       <pointLight position={[10, 10, 10]} />
-                      <ModelViewer imudata={rpy} />
+                      <ModelViewer imudata={{ roll:data[selectedVehicle]?.ATTITUDE?.roll , pitch: data[selectedVehicle]?.ATTITUDE?.pitch, yaw: data[selectedVehicle]?.ATTITUDE?.yaw }} />
                     </Canvas>
                   </div>
-                </div>
               </div>
             )}
           </div>

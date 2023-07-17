@@ -12,7 +12,7 @@ const Quick = () => {
         <div>
           <div className="heading">Altitude (m)</div>
           <div className="value">
-            {data[selectedVehicle]?.GLOBAL_POSITION_INT?.alt || 0.0}
+            {data[selectedVehicle]?.GLOBAL_POSITION_INT?.alt?.toFixed(2) || 0.0}
           </div>
         </div>
       </Grid>
@@ -20,7 +20,7 @@ const Quick = () => {
         <div>
           <div className="heading">GroundSpeed(m/s)</div>
           <div className="value">
-            {data[selectedVehicle]?.VFR_HUD?.groundspeed || 0.0}
+            {data[selectedVehicle]?.VFR_HUD?.groundspeed?.toFixed(2) || 0.0}
           </div>
         </div>
       </Grid>
@@ -34,7 +34,7 @@ const Quick = () => {
         <div>
           <div className="heading">Yaw (deg)</div>
           <div className="value">
-            {data[selectedVehicle]?.ATTITUDE?.yaw || 0.0}
+            {data[selectedVehicle]?.ATTITUDE?.yaw?.toFixed(2) || 0.0}
           </div>
         </div>
       </Grid>

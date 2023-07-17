@@ -115,10 +115,10 @@
 
 .speed-and-rpy {
   display: flex;
-  background-color: #343438dc;
+  /* background-color: #343438dc; */
   position: relative;
   height: fit-content;
-  padding: 20px;
+  /* padding: 20px; */
   border-radius: 40px;
   align-items: center;
   margin-top: 10px;
