@@ -8,12 +8,16 @@ import {
   PolylineF,
 } from "@react-google-maps/api";
 import CircularProgress from "@mui/material/CircularProgress";
+import Button from "@mui/material/Button";
+
+import { writeMission } from "./functionUtils";
+
 import "./Plan.css";
 import { useData } from "./components/context/auth/DataState";
 import "/node_modules/react-grid-layout/css/styles.css";
 import "/node_modules/react-resizable/css/styles.css";
 import { Responsive, WidthProvider } from "react-grid-layout";
-
+import VehicleSelector from "./components/VehicleSelector";
 // const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const Plan = () => {
@@ -24,7 +28,7 @@ const Plan = () => {
   const [zoom, setzoom] = useState(15);
   const [map, setMap] = useState(null);
   const [headerItem, setheaderItem] = useState("DEFAULT");
-  const { data, client } = useData();
+  const { data, client, selectedVehicle } = useData();
 
   const [tableHeader, settableHeader] = useState([
     "P1",
@@ -42,35 +46,6 @@ const Plan = () => {
   useEffect(() => {
     setpath((val) => pathFull.map((val) => ({ lat: val.p5, lng: val.p6 })));
   }, [pathFull]);
-
-  const writeMission = () => {
-    client.send(
-      JSON.stringify({
-        type: "message",
-        purpose: "MissionWrite",
-        pathFull,
-      })
-    );
-    // const postData = { pathFull };
-    // const requestOptions = {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(postData),
-    // };
-    // fetch("/api/writemission", requestOptions).then((response) =>
-    //   response.json()
-    // );
-  };
-
-  // const callBackendAPI = async () => {
-  //   const response = await fetch("/api");
-  //   const body = await response.json();
-
-  //   if (response.status !== 200) {
-  //     throw Error(body.message);
-  //   }
-  //   return body;
-  // };
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -231,7 +206,13 @@ const Plan = () => {
             )}
           </div>
           <div className="right-column">
-            <button onClick={writeMission}>Write Mission</button>
+            <VehicleSelector />
+            <Button
+              onClick={() => writeMission(client, selectedVehicle, pathFull)}
+              variant="contained"
+            >
+              Write Mission
+            </Button>
           </div>
         </div>
         <div className="bottom-area">
@@ -356,11 +337,27 @@ const Plan = () => {
 
 const headerList = {
   DEFAULT: ["P1", "P2", "P3", "P4", "Latitude", "Longitude", "Altitude"],
-  MAV_CMD_NAV_WAYPOINT: ["Delay", "Accept Raidus", "WP Radius", "Yaw", "Latitude", "Longitude", "Altitude"],
+  MAV_CMD_NAV_WAYPOINT: [
+    "Delay",
+    "Accept Raidus",
+    "WP Radius",
+    "Yaw",
+    "Latitude",
+    "Longitude",
+    "Altitude",
+  ],
   MAV_CMD_NAV_TAKEOFF: ["", "", "", "", "", "", "Alt"],
   MAV_CMD_NAV_RETURN_TO_LAUNCH: ["", "", "", "", "", "", ""],
   // MAV_CMD_NAV_LOITER_TIME: ["", "", "", "", "Time", "", ""],
-  MAV_CMD_NAV_DELAY: ["Seconds (or -1)", "Hour UTC (or -1)", "Minute UTC (or -1)", "Second UTC (or -1)", "", "", ""],
+  MAV_CMD_NAV_DELAY: [
+    "Seconds (or -1)",
+    "Hour UTC (or -1)",
+    "Minute UTC (or -1)",
+    "Second UTC (or -1)",
+    "",
+    "",
+    "",
+  ],
   MAV_CMD_DO_SET_MODE: ["Mode", "", "", "", "", "", ""],
   MAV_CMD_NAV_LAND: ["", "", "", "", "Abort Alt", "Precision Mode", ""],
   MAV_CMD_NAV_LOITER_TURNS: ["", "", "", "Turns", "Time", "", ""],

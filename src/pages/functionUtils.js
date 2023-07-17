@@ -1,29 +1,29 @@
-export function requestConnect (client, {connectType, baud}) {
+export function requestConnect(client, { connectType, baud }) {
   client.send(
     JSON.stringify({
       type: "message",
       purpose: "ConnectVehicle",
       port: connectType,
-      baud
+      baud,
     })
-    );
-  };
-  
-  export function portUpdate (client) {
-    client.send(
-      JSON.stringify({
-        type: "message",
-        purpose: "PortUpdate",
-      })
-      );
-    };
-    
-    export function arm(client, sysid) {
-      client.send(
-        JSON.stringify({
-          type: "message",
-          purpose: "Arm",
-          systemid: sysid,
+  );
+}
+
+export function portUpdate(client) {
+  client.send(
+    JSON.stringify({
+      type: "message",
+      purpose: "PortUpdate",
+    })
+  );
+}
+
+export function arm(client, sysid) {
+  client.send(
+    JSON.stringify({
+      type: "message",
+      purpose: "Arm",
+      systemid: sysid,
     })
   );
 }
@@ -45,6 +45,17 @@ export function takeoff(client, sysid, data) {
       purpose: "Takeoff",
       systemid: sysid,
       data,
+    })
+  );
+}
+
+export function writeMission(client, sysid, data) {
+  client.send(
+    JSON.stringify({
+      type: "message",
+      purpose: "MissionWrite",
+      systemid: sysid,
+      pathFull: data,
     })
   );
 }

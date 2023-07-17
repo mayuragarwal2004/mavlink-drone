@@ -11,28 +11,31 @@ import {
   MarkerF,
   InfoWindowF,
 } from "@react-google-maps/api";
-import CircularProgress from "@mui/material/CircularProgress";
-import Slider from "@mui/material/Slider";
-import BatteryGauge from "react-battery-gauge";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { Canvas } from "react-three-fiber";
 import ModelViewer from "./ModelViewer";
 import { useData } from "./components/context/auth/DataState";
 import { arm, disarm, portUpdate, requestConnect } from "./functionUtils";
 import RightPanelComponent from "./components/RightPanelComponent";
+import VehicleSelector from "./components/VehicleSelector";
 
+import CircularProgress from "@mui/material/CircularProgress";
+import Slider from "@mui/material/Slider";
+import BatteryGauge from "react-battery-gauge";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import CableIcon from "@mui/icons-material/Cable";
+import ConnecitonIcon from "@mui/icons-material/Cable";
 import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Grid";
+import MapIcon from "@mui/icons-material/Map";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 function a11yProps(index) {
   return {
@@ -198,7 +201,7 @@ const Data = () => {
             <GoogleMap
               zoom={13}
               onLoad={(map) => {
-                map.setMapTypeId("satellite");
+                map.setMapTypeId("roadmap");
                 map.setZoom(zoom);
                 setMap(map);
                 // console.log(map.getZoom());
@@ -254,36 +257,45 @@ const Data = () => {
           <div className="header-main-parent">
             <div className="left-header">
               <div className="vehicleID dropdown" style={{ float: "left" }}>
-                <button className="dropbtn">Vehicle 1</button>
-                <div className="dropdown-content" style={{ left: 0 }}>
-                  <div className="dropdown-content-block">Vehicle 2</div>
-                  <div className="dropdown-content-block">Vehicle 3</div>
-                </div>
+                <VehicleSelector />
               </div>
               <SettingsIcon />
             </div>
             {/* <div className="center-header">center</div> */}
-            <div className="right-header">
-              <div className="header-right-info-block">Manual</div>
-              <button className="header-right-info-block" onClick={toggleArm}>
-                {armStatus.isArm ? "Armed" : "Disarmed"}
-              </button>
-              {/* <div className="divider" /> */}
-              <div className="battery-level">
-                <BatteryGauge
-                  orientation="vertical"
-                  customization={{
-                    batteryBody: { strokeColor: "white" },
-                    batteryCap: { strokeColor: "white" },
-                    batteryMeter: { noOfCells: 10 },
-                    readingText: { fontSize: 0 },
-                  }}
-                  size={20}
-                  value={battery.level}
-                />
-                {battery.level}V
+            {selectedVehicle && data[selectedVehicle] && (
+              <div className="right-header">
+                <div className="header-right-info-block">
+                  {data[selectedVehicle]?.HEARTBEAT?.flightmode}
+                </div>
+                <button
+                  className="header-right-info-block"
+                  onClick={() =>
+                    data[selectedVehicle]?.HEARTBEAT?.armed
+                      ? disarm(client, data[selectedVehicle].systemid)
+                      : arm(client, data[selectedVehicle].systemid)
+                  }
+                >
+                  {data[selectedVehicle]?.HEARTBEAT?.armed
+                    ? "Armed"
+                    : "Disarmed"}
+                </button>
+                {/* <div className="divider" /> */}
+                <div className="battery-level">
+                  <BatteryGauge
+                    orientation="vertical"
+                    customization={{
+                      batteryBody: { strokeColor: "white" },
+                      batteryCap: { strokeColor: "white" },
+                      batteryMeter: { noOfCells: 10 },
+                      readingText: { fontSize: 0 },
+                    }}
+                    size={20}
+                    value={data[selectedVehicle].Battery.level}
+                  />
+                  {data[selectedVehicle].Battery.level}%
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
         <div className="main-map-overlay">
@@ -305,13 +317,13 @@ const Data = () => {
                 aria-label="Vertical tabs example"
                 sx={{ borderRight: 1, borderColor: "divider" }}
               >
-                <Tab icon={<CableIcon />} {...a11yProps(0)} />
-                <Tab label="Item Two" {...a11yProps(1)} />
-                <Tab label="Item Three" {...a11yProps(2)} />
-                <Tab label="Item Four" {...a11yProps(3)} />
-                <Tab label="Item Five" {...a11yProps(4)} />
-                <Tab label="Item Six" {...a11yProps(5)} />
-                <Tab label="Item Seven" {...a11yProps(6)} />
+                <Tab
+                  icon={<ConnecitonIcon />}
+                  title="Connection"
+                  {...a11yProps(0)}
+                />
+                <Tab icon={<MapIcon />} title="Planning" {...a11yProps(1)} />
+                <Tab icon={<VisibilityOffIcon />} title="Hide" {...a11yProps(2)} />
               </Tabs>
               <TabPanel value={value} index={0}>
                 {Object.keys(data).map((item, i) => (
@@ -434,10 +446,10 @@ const Data = () => {
                       }}
                       onOpen={() => {
                         portUpdate(client);
-                        setconnectSelectOpen(true)
+                        setconnectSelectOpen(true);
                       }}
                       onClose={() => {
-                        setconnectSelectOpen(false)
+                        setconnectSelectOpen(false);
                       }}
                     >
                       <MenuItem value="">
@@ -511,22 +523,7 @@ const Data = () => {
                 </div>
               </TabPanel>
               <TabPanel value={value} index={1}>
-                Item Two
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-                Item Three
-              </TabPanel>
-              <TabPanel value={value} index={3}>
-                Item Four
-              </TabPanel>
-              <TabPanel value={value} index={4}>
-                Item Five
-              </TabPanel>
-              <TabPanel value={value} index={5}>
-                Item Six
-              </TabPanel>
-              <TabPanel value={value} index={6}>
-                Item Seven
+                This is under devlopment.
               </TabPanel>
             </Box>
             {/* </div> */}
@@ -549,25 +546,23 @@ const Data = () => {
               step={5}
               onKeyDown={preventHorizontalKeyboardNavigation}
             />
-            <div className="speed-and-rpy">
-              <div className="speed speed-and-rpy-child">
-                <div>Ground Speed</div>
-                <div>{Math.round(droneData?.Groundspeed)}</div>
-              </div>
-              <div className="altitude speed-and-rpy-child">
-                <div>Altitude</div>
-                <div>{altitude}</div>
-              </div>
-              <div className="rpy-parent">
-                <div className="rpy">
-                  <Canvas>
-                    <ambientLight intensity={0.5} />
-                    <pointLight position={[10, 10, 10]} />
-                    <ModelViewer imudata={rpy} />
-                  </Canvas>
+            {selectedVehicle && data[selectedVehicle] && (
+              <div className="speed-and-rpy">
+                <div className="altitude speed-and-rpy-child">
+                  <div>Altitude</div>
+                  <div>{altitude}</div>
+                </div>
+                <div className="rpy-parent">
+                  <div className="rpy">
+                    <Canvas>
+                      <ambientLight intensity={0.5} />
+                      <pointLight position={[10, 10, 10]} />
+                      <ModelViewer imudata={rpy} />
+                    </Canvas>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
           <div
             className={"right-panel-main-parent ".concat(
