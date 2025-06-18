@@ -69,8 +69,11 @@ class MavlinkConnector:
             Thread(target=uploadServerData, args=(self, 1,)).start()
             Thread(target=self.process_messages, args=()).start()
         except Exception as e:
-            traceback.print_exc()  # Print the traceback for debugging purposes
-            raise e  # Raise the exception again to propagate it to the caller
+            # traceback.print_exc()  # Print the traceback for debugging purposes
+            print(e)  # Raise the exception again to propagate it to the caller
+
+    def __del__(self):
+        self.vehicle.close()
 
     def request_data_streams(self):
         # Request all data streams
@@ -201,7 +204,7 @@ class MavlinkConnector:
     def sysstatus_callback(self, vehicle, name, message):
         self.individual_data["SYS_STATUS"]["current"] = message.current_battery
         self.individual_data["SYS_STATUS"]["level"] = message.battery_remaining
-        self.individual_data["SYS_STATUS"]["voltage"] = message.voltage_battery/1e3
+        self.individual_data["SYS_STATUS"]["voltage"] = message.voltage_battery
         # print(
         #     f"SYS_STATUS: Voltage Battery: {message.voltage_battery}")
 

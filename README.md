@@ -1,70 +1,88 @@
-# Getting Started with Create React App
+# Mavlink Drone Remote Control Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project enables remote control and monitoring of drones using a telemetry-based on-site server, a Python MAVLink interface, and a Node.js WebSocket server. The system streams real-time drone data to all connected users via a modern React web interface.
 
-## Available Scripts
+## Architecture
 
-In the project directory, you can run:
+![System Architecture](./assets/architecture.png)
 
-### `npm start`
+## Frontend Glimpse
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+![Frontend Screenshot](./assets/frontend.png)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+- **Remote Drone Control:** Send commands and receive telemetry from drones using MAVLink protocol.
+- **Real-Time Data Sharing:** All connected users receive live drone data via WebSockets.
+- **Multi-User Web Interface:** Modern React frontend with 3D drone visualization, Google Maps integration, and telemetry panels.
+- **Modular Backend:** Python handles MAVLink communication; Node.js manages WebSocket connections and relays data between Python and frontend clients.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Architecture
 
-### `npm run build`
+```
+[Drone] ←→ [Python MAVLink Script] ←→ [Node.js WebSocket Server] ←→ [React Web App]
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Python (`server/pythonScripts/`):** Connects to the drone using MAVLink, processes telemetry, and communicates with the Node.js server via WebSockets.
+- **Node.js (`server/server.js`):** Acts as a relay between the Python backend and all web clients.
+- **React Frontend (`src/`):** Displays drone status, telemetry, and 3D visualization to users.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Getting Started
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Prerequisites
 
-### `npm run eject`
+- Node.js (v18+ recommended)
+- Python 3.7+
+- [pymavlink](https://github.com/ArduPilot/pymavlink) and [dronekit](http://python.dronekit.io/) (for Python backend)
+- npm (for frontend and server)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Installation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/yourusername/mavlink-drone.git
+   cd mavlink-drone
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+2. **Install Node.js dependencies:**
+   ```sh
+   npm install
+   cd server
+   npm install
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. **Install Python dependencies:**
+   ```sh
+   pip install pymavlink dronekit asyncio websockets
+   ```
 
-## Learn More
+### Running the System
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. **Start the Python MAVLink server:**
+   ```sh
+   cd server/pythonScripts
+   python main2.py
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+2. **Start the Node.js WebSocket server:**
+   ```sh
+   cd server
+   npm start
+   ```
 
-### Code Splitting
+3. **Start the React frontend:**
+   ```sh
+   npm start
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+4. **Open your browser at** [http://localhost:3000](http://localhost:3000)
 
-### Analyzing the Bundle Size
+## File Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- `src/` — React frontend (UI, 3D model, Google Maps, etc.)
+- `server/server.js` — Node.js WebSocket relay server
+- `server/pythonScripts/` — Python MAVLink interface scripts
 
-### Making a Progressive Web App
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { database } from "../base";
 import { set, update, ref, onValue } from "firebase/database";
 import "./Data.css";
 import droneicon from "../drone-icon.png";
@@ -35,7 +34,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Grid";
 import MapIcon from "@mui/icons-material/Map";
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 function a11yProps(index) {
   return {
@@ -201,7 +200,7 @@ const Data = () => {
             <GoogleMap
               zoom={13}
               onLoad={(map) => {
-                map.setMapTypeId("roadmap");
+                map.setMapTypeId("satellite");
                 map.setZoom(zoom);
                 setMap(map);
                 // console.log(map.getZoom());
@@ -323,7 +322,11 @@ const Data = () => {
                   {...a11yProps(0)}
                 />
                 <Tab icon={<MapIcon />} title="Planning" {...a11yProps(1)} />
-                <Tab icon={<VisibilityOffIcon />} title="Hide" {...a11yProps(2)} />
+                <Tab
+                  icon={<VisibilityOffIcon />}
+                  title="Hide"
+                  {...a11yProps(2)}
+                />
               </Tabs>
               <TabPanel value={value} index={0}>
                 {Object.keys(data).map((item, i) => (
@@ -548,13 +551,19 @@ const Data = () => {
             />
             {selectedVehicle && data[selectedVehicle] && (
               <div className="speed-and-rpy">
-                  <div className="rpy">
-                    <Canvas>
-                      <ambientLight intensity={0.5} />
-                      <pointLight position={[10, 10, 10]} />
-                      <ModelViewer imudata={{ roll:data[selectedVehicle]?.ATTITUDE?.roll , pitch: data[selectedVehicle]?.ATTITUDE?.pitch, yaw: data[selectedVehicle]?.ATTITUDE?.yaw }} />
-                    </Canvas>
-                  </div>
+                <div className="rpy">
+                  <Canvas>
+                    <ambientLight intensity={0.5} />
+                    <pointLight position={[10, 10, 10]} />
+                    <ModelViewer
+                      imudata={{
+                        roll: data[selectedVehicle]?.ATTITUDE?.roll,
+                        pitch: data[selectedVehicle]?.ATTITUDE?.pitch,
+                        yaw: data[selectedVehicle]?.ATTITUDE?.yaw,
+                      }}
+                    />
+                  </Canvas>
+                </div>
               </div>
             )}
           </div>
